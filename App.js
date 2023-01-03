@@ -6,6 +6,7 @@ import {
   View,
   TextInput,
   ScrollView,
+  FlatList,
 } from "react-native";
 import { Colors } from "react-native/Libraries/NewAppScreen";
 
@@ -20,7 +21,7 @@ export default function App() {
   const addGoalHandler = () => {
     setCourseGoals((currentCourseGoals) => [
       ...currentCourseGoals,
-      enteredGoalText,
+      {text: enteredGoalText, key: Math.random().toString() },
     ]);
 
     //[...courseGoals, enteredGoalText ]
@@ -41,16 +42,23 @@ export default function App() {
         <Button title="Add Goal" onPress={addGoalHandler} />
       </View>
       <View style={styles.goalsContainer}>
-        <ScrollView>
-          {/*the list of goals that are renderred */}
-          <Text>List of goals...</Text>
-          {courseGoals.length == 0 && <Text>Add the goal</Text>}
-          {courseGoals.map((goal) => (
-            <View style={styles.goalItem} key={goal}>
-              <Text style={styles.goalText}>{goal}</Text>
-            </View>
-          ))}
-        </ScrollView>
+        <Text>List of goals...</Text>
+        {courseGoals.length == 0 && <Text>Add the goal</Text>}
+        <FlatList
+          data={courseGoals} 
+          renderItem={(itemData) => {
+            return (
+              <View style={styles.goalItem} >
+                <Text style={styles.goalText}>{itemData.item.text}</Text>
+              </View>
+            );
+          }}
+        />
+
+        {/*the list of goals that are renderred 
+          <View style={styles.goalItem} key={goal}>
+            <Text style={styles.goalText}>{goal}</Text>
+          </View>*/}
       </View>
     </View>
   );
